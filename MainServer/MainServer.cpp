@@ -13,6 +13,7 @@ int main()
 		MakeShared<SToCSession>,
 		10);
 
+	ASSERT_CRASH(service->Init());
 	ASSERT_CRASH(service->Start());
 
 	for (int32 i = 0; i < 5; i++)

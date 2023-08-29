@@ -202,7 +202,9 @@ void Session::ProcessConnect()
 {
 	_connectEvent.owner = nullptr;
 	_connected.store(true);
-	GetService()->AddSession(GetSessionRef());
+
+	GetService()->AddSession(GetSessionRef()); // 세션 서비스에 추가
+
 	OnConnected();
 	RegisterRecv();
 }

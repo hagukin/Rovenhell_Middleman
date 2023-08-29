@@ -19,8 +19,9 @@ public:
 	Service(ServiceType type, NetAddress address, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount = 1);
 	virtual ~Service();
 
+	virtual bool Init() abstract;
 	virtual bool Start() abstract;
-	bool CanStart() { return _sessionFactory != nullptr; }
+	bool IsValid() { return _sessionFactory != nullptr; }
 
 	virtual void CloseService();
 	void SetSessionFactory(SessionFactory func) { _sessionFactory = func; }
@@ -45,7 +46,7 @@ protected:
 	Set<SharedPtr<Session>> _sessions;
 	int32 _sessionCount = 0;
 	int32 _maxSessionCount = 0;
-	SessionFactory _sessionFactory;
+	SessionFactory _sessionFactory = nullptr;
 };
 
 
@@ -55,6 +56,9 @@ public:
 	ClientService(NetAddress targetAddress, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount = 1);
 	virtual ~ClientService() {}
 
+	SharedPtr<ClientService> shared_from_this() { return static_pointer_cast<ClientService>(Service::shared_from_this()); }
+
+	virtual bool Init() override;
 	virtual bool Start() override;
 };
 
@@ -65,6 +69,9 @@ public:
 	ServerService(NetAddress targetAddress, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount = 1);
 	virtual ~ServerService() {}
 
+	SharedPtr<ServerService> shared_from_this() { return static_pointer_cast<ServerService>(Service::shared_from_this()); }
+
+	virtual bool Init() override;
 	virtual bool Start() override;
 	virtual void CloseService() override;
 

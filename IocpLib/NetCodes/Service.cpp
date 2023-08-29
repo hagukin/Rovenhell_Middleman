@@ -49,11 +49,14 @@ ClientService::ClientService(NetAddress targetAddress, SharedPtr<IocpCore> core,
 {
 }
 
+bool ClientService::Init()
+{
+	if (!IsValid()) return false;
+	return true;
+}
+
 bool ClientService::Start()
 {
-	if (CanStart() == false)
-		return false;
-
 	const int32 sessionCount = GetMaxSessionCount();
 	for (int32 i = 0; i < sessionCount; i++)
 	{
@@ -70,19 +73,24 @@ ServerService::ServerService(NetAddress address, SharedPtr<IocpCore> core, Sessi
 {
 }
 
-bool ServerService::Start()
+bool ServerService::Init()
 {
-	if (CanStart() == false)
+	// Listener를 만들고, 로직 서버 같이 서버 동작에 필수적인 다른 서버들과 필요한 커넥션을 맺는다
+	// 이 때는 IOCP를 사용해 멀티스레드에서의 커넥션을 처리하는 대신 본 스레드에서 바로 커넥션을 처리한다
+	if (!IsValid())
 		return false;
-
 	_listener = MakeShared<Listener>();
 	if (_listener == nullptr)
 		return false;
-
-	SharedPtr<ServerService> service = static_pointer_cast<ServerService>(shared_from_this());
-	if (_listener->StartAccept(service) == false)
+	if (_listener->Init(shared_from_this()) == false)
 		return false;
+	return true;
+}
 
+bool ServerService::Start()
+{
+	if (_listener->StartAccept() == false)
+		return false;
 	return true;
 }
 

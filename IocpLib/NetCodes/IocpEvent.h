@@ -44,6 +44,7 @@ class AcceptEvent : public IocpEvent
 {
 public:
 	AcceptEvent() : IocpEvent(EventType::Accept) { }
+	void Reset() { session = nullptr; Init(); }
 public:
 	SharedPtr<Session>	session = nullptr;
 };

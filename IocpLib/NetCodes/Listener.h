@@ -12,7 +12,8 @@ public:
 	~Listener();
 
 public:
-	bool StartAccept(SharedPtr<ServerService> service);
+	bool Init(SharedPtr<ServerService> service);
+	bool StartAccept();
 	void CloseSocket();
 
 public:
@@ -20,12 +21,12 @@ public:
 	virtual void Dispatch(class IocpEvent* iocpEvent, int32 numOfBytes = 0) override;
 
 private:
-	void RegisterAccept(AcceptEvent* acceptEvent);
-	void ProcessAccept(AcceptEvent* acceptEvent);
+	void RegisterAccept(); // _acceptEvent를 초기화하고, 그 후 빈 Event 객체를 Register한다 (논블로킹)
+	void ProcessAccept(); // _acceptEvent 정보를 기반으로 Accept를 처리한다
 
 protected:
 	SOCKET _socket = INVALID_SOCKET;
-	Vector<AcceptEvent*> _acceptEvents;
-	SharedPtr<ServerService> _service;
+	AcceptEvent* _acceptEvent = nullptr; // 여러 스레드에서 사용되긴 하지만 한 번에 하나의 스레드에서만 접근하므로 락이 필요 없다
+	SharedPtr<ServerService> _service = nullptr;
 };
 
