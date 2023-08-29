@@ -4,6 +4,7 @@
 #include "Listener.h"
 
 
+/* Service */
 Service::Service(ServiceType type, NetAddress address, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount)
 	: _type(type), _netAddress(address), _iocpCore(core), _sessionFactory(factory), _maxSessionCount(maxSessionCount)
 {
@@ -44,6 +45,7 @@ void Service::ReleaseSession(SharedPtr<Session> session)
 }
 
 
+/* ClientService*/
 ClientService::ClientService(NetAddress targetAddress, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount)
 	: Service(ServiceType::Client, targetAddress, core, factory, maxSessionCount)
 {
@@ -68,8 +70,10 @@ bool ClientService::Start()
 	return true;
 }
 
-ServerService::ServerService(NetAddress address, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount)
-	: Service(ServiceType::Server, address, core, factory, maxSessionCount)
+
+/* ServerService */
+ServerService::ServerService(NetAddress targetAddress, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount)
+	: Service(ServiceType::Middleman, targetAddress, core, factory, maxSessionCount)
 {
 }
 
@@ -97,4 +101,22 @@ bool ServerService::Start()
 void ServerService::CloseService()
 {
 	Service::CloseService();
+}
+
+
+/* LogicServerService */
+LogicServerService::LogicServerService(NetAddress targetAddress, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount)
+	: ServerService(targetAddress, core, factory, maxSessionCount)
+{
+	_type = ServiceType::LogicServer;
+}
+
+bool LogicServerService::Init()
+{
+	return ServerService::Init();
+}
+
+bool LogicServerService::Start()
+{
+	return ServerService::Start();
 }

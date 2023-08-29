@@ -4,19 +4,45 @@
 #include "NetCodes/Session.h"
 #include "SToCSession.h"
 #include "SToCSessionManager.h"
+#include "SToLSession.h"
+#include "SToLSessionManager.h"
 
 int main()
 {
+	SharedPtr<LogicServerService> logicService = MakeShared<LogicServerService>(
+		NetAddress(L"127.0.0.1", 8888),
+		MakeShared<IocpCore>(),
+		MakeShared<SToLSession>,
+		1);
+
+	ASSERT_CRASH(logicService->Init()); // TODO
+	ASSERT_CRASH(logicService->Start()); // TODO
+
+	for (int32 i = 0; i < 2; i++)
+	{
+		GThreadManager->Launch([=]()
+			{
+				while (true)
+				{
+					logicService->GetIocpCore()->Dispatch();
+				}
+			});
+	}
+
+	while (!logicService->IsConnected())
+	{
+	}
+
 	SharedPtr<ServerService> service = MakeShared<ServerService>(
 		NetAddress(L"127.0.0.1", 7777),
 		MakeShared<IocpCore>(),
 		MakeShared<SToCSession>,
-		10);
+		3);
 
 	ASSERT_CRASH(service->Init());
 	ASSERT_CRASH(service->Start());
 
-	for (int32 i = 0; i < 5; i++)
+	for (int32 i = 0; i < 4; i++)
 	{
 		GThreadManager->Launch([=]()
 			{
@@ -40,7 +66,7 @@ int main()
 		::memcpy(&buffer[6], sendData, sizeof(sendData));
 		sendBuffer->Close((sizeof(sendData) + sizeof(PacketHeader)));
 
-		GSessionManager.Broadcast(sendBuffer);
+		GSToCSessionManager.Broadcast(sendBuffer);
 
 		this_thread::sleep_for(16ms); // 60 frame
 	}

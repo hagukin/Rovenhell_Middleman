@@ -164,11 +164,15 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="SToLSession.cpp" />
+    <ClCompile Include="SToLSessionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SToCSession.h" />
     <ClInclude Include="SToCSessionManager.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SToLSession.h" />
+    <ClInclude Include="SToLSessionManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

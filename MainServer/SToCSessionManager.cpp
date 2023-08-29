@@ -2,7 +2,7 @@
 #include "SToCSessionManager.h"
 #include "SToCSession.h"
 
-SToCSessionManager GSessionManager;
+SToCSessionManager GSToCSessionManager;
 
 void SToCSessionManager::Add(SharedPtr<SToCSession> session)
 {

@@ -27,8 +27,8 @@ public:
 	bool Connect();
 	void Disconnect(const WCHAR* cause);
 
-	shared_ptr<Service> GetService() { return _service.lock(); }
-	void SetService(shared_ptr<Service> service) { _service = service; }
+	SharedPtr<Service> GetService() { return _service.lock(); }
+	void SetService(SharedPtr<Service> service) { _service = service; }
 
 public:
 	void SetNetAddress(NetAddress address) { _netAddress = address; }

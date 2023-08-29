@@ -4,13 +4,13 @@
 
 void SToCSession::OnConnected()
 {
-	GSessionManager.Add(static_pointer_cast<SToCSession>(shared_from_this()));
+	GSToCSessionManager.Add(static_pointer_cast<SToCSession>(shared_from_this()));
 	cout << "Client connected!" << endl;
 }
 
 void SToCSession::OnDisconnected()
 {
-	GSessionManager.Remove(static_pointer_cast<SToCSession>(shared_from_this()));
+	GSToCSessionManager.Remove(static_pointer_cast<SToCSession>(shared_from_this()));
 }
 
 int32 SToCSession::OnRecvPacket(BYTE* buffer, int32 len)

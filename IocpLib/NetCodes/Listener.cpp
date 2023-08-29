@@ -40,7 +40,7 @@ bool Listener::Init(SharedPtr<ServerService> service)
 
 bool Listener::StartAccept()
 {
-	RegisterAccept(); // RegisterAccept 체인 최초 시작지점
+	RegisterAccept(nullptr); // RegisterAccept 체인 최초 시작지점
 	return true;
 }
 
@@ -61,12 +61,23 @@ void Listener::Dispatch(IocpEvent* iocpEvent, int32 numOfBytes)
 	ProcessAccept();
 }
 
-void Listener::RegisterAccept()
+void Listener::RegisterAccept(SharedPtr<Session> unusedSession)
 {
-	// 재활용 위해 기존 acceptEvent 정보 초기화
+	// 세션 생성 혹은 재사용
+	SharedPtr<Session> session = nullptr;
+	if (unusedSession != nullptr) session = unusedSession;
+	else session = _service->CreateSession();
+
+	// 재사용 위해 기존 acceptEvent 정보 초기화
 	_acceptEvent->Reset();
-	SharedPtr<Session> session = _service->CreateSession();
 	_acceptEvent->session = session;
+
+	// Service에 잔여 공간 생길 때까지 대기
+	if (!_service->CanAddNewSession())
+		cout << "[Listener] Service에 Connect할 수 있는 최대 세션 수가 가득 찼습니다. 잔여 공간이 생길 때까지 Accept 하지 않고 대기합니다." << endl;
+	while (!_service->CanAddNewSession())
+	{
+	}
 
 	DWORD bytesReceived = 0;
 	if (false == SocketModifier::AcceptEx(_socket, session->GetSocket(), session->_recvBuffer.WritePos(), 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, OUT & bytesReceived, static_cast<LPOVERLAPPED>(_acceptEvent)))
@@ -74,7 +85,8 @@ void Listener::RegisterAccept()
 		const int32 errorCode = ::WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING)
 		{
-			RegisterAccept();
+			cout << "[Listener] 에러가 발생했습니다 - 에러코드: " << errorCode << endl;
+			RegisterAccept(unusedSession);
 		}
 	}
 }
@@ -85,7 +97,7 @@ void Listener::ProcessAccept()
 
 	if (false == SocketModifier::SetUpdateAcceptSocket(session->GetSocket(), _socket))
 	{
-		RegisterAccept();
+		RegisterAccept(session); // 세션 처리 에러; 재사용
 		return;
 	}
 
@@ -93,11 +105,11 @@ void Listener::ProcessAccept()
 	int32 sizeOfSockAddr = sizeof(sockAddress);
 	if (SOCKET_ERROR == ::getpeername(session->GetSocket(), OUT reinterpret_cast<SOCKADDR*>(&sockAddress), &sizeOfSockAddr))
 	{
-		RegisterAccept();
+		RegisterAccept(session); // 세션 처리 에러; 재사용
 		return;
 	}
 
 	session->SetNetAddress(NetAddress(sockAddress));
 	session->ProcessConnect();
-	RegisterAccept();
+	RegisterAccept(nullptr); // 세션 처리 성공; 새 세션 생성
 }

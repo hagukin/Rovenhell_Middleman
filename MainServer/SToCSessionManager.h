@@ -15,4 +15,4 @@ private:
 	Set<SharedPtr<SToCSession>> _sessions;
 };
 
-extern SToCSessionManager GSessionManager;
+extern SToCSessionManager GSToCSessionManager;

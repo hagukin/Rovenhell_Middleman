@@ -3,15 +3,10 @@
 #include "IocpCore.h"
 #include "Listener.h"
 #include "Session.h"
+#include "../Fundamentals/Enumerations.h"
 #include <functional>
 
 using SessionFactory = function<SharedPtr<Session>(void)>;
-
-enum class ServiceType : uint8
-{
-	Server,
-	Client
-};
 
 class Service : public enable_shared_from_this<Service>
 {
@@ -31,6 +26,7 @@ public:
 	void ReleaseSession(SharedPtr<Session> session);
 	int32 GetCurrentSessionCount() { return _sessionCount; }
 	int32 GetMaxSessionCount() { return _maxSessionCount; }
+	bool CanAddNewSession() { READ_LOCK; return _sessionCount < _maxSessionCount; }
 
 public:
 	ServiceType GetServiceType() { return _type; }
@@ -66,7 +62,7 @@ public:
 class ServerService : public Service
 {
 public:
-	ServerService(NetAddress targetAddress, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount = 1);
+	ServerService(NetAddress targetAddress, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount);
 	virtual ~ServerService() {}
 
 	SharedPtr<ServerService> shared_from_this() { return static_pointer_cast<ServerService>(Service::shared_from_this()); }
@@ -77,4 +73,22 @@ public:
 
 private:
 	SharedPtr<Listener> _listener = nullptr;
+};
+
+
+class LogicServerService : public ServerService
+{
+public:
+	LogicServerService(NetAddress targetAddress, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount = 1);
+	virtual ~LogicServerService() {}
+
+	SharedPtr<LogicServerService> shared_from_this() { return static_pointer_cast<LogicServerService>(Service::shared_from_this()); }
+
+	virtual bool Init() override;
+	virtual bool Start() override;
+	bool IsConnected() { return _isConnected.load(); }
+	void SetConnectedTo(bool isConnected) { _isConnected.store(isConnected); }
+
+private:
+	Atomic<bool> _isConnected = false;
 };

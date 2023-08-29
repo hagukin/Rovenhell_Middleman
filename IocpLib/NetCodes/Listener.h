@@ -1,6 +1,7 @@
 #pragma once
 #include "IocpCore.h"
 #include "NetAddress.h"
+#include "Session.h"
 
 class AcceptEvent;
 class ServerService;
@@ -21,7 +22,7 @@ public:
 	virtual void Dispatch(class IocpEvent* iocpEvent, int32 numOfBytes = 0) override;
 
 private:
-	void RegisterAccept(); // _acceptEvent를 초기화하고, 그 후 빈 Event 객체를 Register한다 (논블로킹)
+	void RegisterAccept(SharedPtr<Session> unusedSession); // 세션 객체를 생성해 IOCP에 등록하고 acceptEvent를 대기한다; 한번 생성된 세션은 성공적으로 Connect될 때까지 재사용된다
 	void ProcessAccept(); // _acceptEvent 정보를 기반으로 Accept를 처리한다
 
 protected:
