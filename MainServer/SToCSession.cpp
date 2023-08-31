@@ -15,19 +15,24 @@ void SToCSession::OnDisconnected()
 
 int32 SToCSession::OnRecvPacket(BYTE* buffer, int32 len)
 {
+	// 클라이언트로부터 수신한 패킷을 그대로 로직서버에게 Send
 	PacketHeader header = *((PacketHeader*)buffer);
-	uint8 recvBuffer[4096];
-	::memcpy(recvBuffer, &buffer[6], header.size - sizeof(PacketHeader));
-	cout << "RecvFromClient: ";
-	for (int i = 0; i < header.size - sizeof(PacketHeader); ++i)
+	SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(header.size);
+	uint8* sendData = sendBuffer->Buffer();
+	::memcpy(sendData, &buffer[0], header.size);
+
+	cout << "Client -> Logic 중개: ";
+	for (int i = sizeof(PacketHeader); i < header.size; ++i)
 	{
-		cout << (char)recvBuffer[i];
+		cout << (char)sendData[i];
 	}
 	cout << endl;
+
+	sendBuffer->Close(header.size);
+	GSToLSessionManager.Send(sendBuffer);
 	return len;
 }
 
 void SToCSession::OnSend(int32 len)
 {
-	cout << "Send 완료, 길이: "<< len << endl;
 }

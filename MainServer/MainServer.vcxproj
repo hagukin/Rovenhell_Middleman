@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MainServer.cpp" />
+    <ClCompile Include="Middleman.cpp" />
     <ClCompile Include="SToCSession.cpp" />
     <ClCompile Include="SToCSessionManager.cpp" />
     <ClCompile Include="pch.cpp">
@@ -168,6 +169,7 @@
     <ClCompile Include="SToLSessionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Middleman.h" />
     <ClInclude Include="SToCSession.h" />
     <ClInclude Include="SToCSessionManager.h" />
     <ClInclude Include="pch.h" />

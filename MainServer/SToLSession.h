@@ -1,6 +1,7 @@
 #pragma once
 #include "NetCodes/Session.h"
 #include "NetCodes/Service.h"
+#include "SToCSessionManager.h"
 
 class SToLSession : public PacketSession
 {

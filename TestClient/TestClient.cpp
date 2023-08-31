@@ -2,8 +2,11 @@
 #include "Fundamentals/ThreadManager.h"
 #include "NetCodes/Service.h"
 #include "NetCodes/Session.h"
+#include "NetCodes/SendBuffer.h"
 #include "CToSSession.h"
 #include "CToSSessionManager.h"
+
+#define TEST_CLIENT_COUNT 5
 
 int main()
 {
@@ -13,7 +16,7 @@ int main()
 		NetAddress(L"127.0.0.1", 7777),
 		MakeShared<IocpCore>(),
 		MakeShared<CToSSession>,
-		5);
+		TEST_CLIENT_COUNT);
 
 	ASSERT_CRASH(service->Init());
 	ASSERT_CRASH(service->Start());
@@ -29,22 +32,22 @@ int main()
 			});
 	}
 
-	//char sendData[1000] = "Hello from Client";
+	unsigned char sendData[6] = { 67, 76, 73, 69, 78, 84 };
 
-	//while (true)
-	//{
-	//	SendBufferRef sendBuffer = GSendBufferManager->Open(4096);
+	while (true)
+	{
+		SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(1000);
 
-	//	BYTE* buffer = sendBuffer->Buffer();
-	//	((PacketHeader*)buffer)->size = (sizeof(sendData) + sizeof(PacketHeader));
-	//	((PacketHeader*)buffer)->id = 1; // 1 : Hello Msg
-	//	::memcpy(&buffer[4], sendData, sizeof(sendData));
-	//	sendBuffer->Close((sizeof(sendData) + sizeof(PacketHeader)));
+		uint8* buffer = sendBuffer->Buffer();
+		((PacketHeader*)buffer)->size = (sizeof(sendData) + sizeof(PacketHeader));
+		((PacketHeader*)buffer)->senderType = 0;
+		((PacketHeader*)buffer)->id = 1;
+		::memcpy(&buffer[6], sendData, sizeof(sendData));
+		sendBuffer->Close((uint32)((PacketHeader*)buffer)->size);
+		GSessionManager.Broadcast(sendBuffer);
 
-	//	GSessionManager.Broadcast(sendBuffer);
-
-	//	this_thread::sleep_for(250ms);
-	//}
+		this_thread::sleep_for(16ms); // 60 frame
+	}
 
 	GThreadManager->Join();
 }

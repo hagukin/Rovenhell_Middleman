@@ -14,6 +14,8 @@ using uint64 = unsigned __int64;
 
 template <typename T>
 using SharedPtr = std::shared_ptr<T>;
+template <typename T>
+using UniquePtr = std::unique_ptr<T>;
 
 template<typename T>
 using Atomic = std::atomic<T>;

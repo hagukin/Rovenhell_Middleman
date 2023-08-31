@@ -22,6 +22,7 @@ int32 CToSSession::OnRecvPacket(BYTE* buffer, int32 len)
 	PacketHeader header = *((PacketHeader*)buffer);
 	uint8 recvBuffer[4096];
 	::memcpy(recvBuffer, &buffer[6], header.size - sizeof(PacketHeader));
+	cout << "RecvFromMiddleman: ";
 	for (int i = 0; i < header.size - sizeof(PacketHeader); ++i)
 	{
 		cout << (char)recvBuffer[i];

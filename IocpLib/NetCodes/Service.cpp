@@ -79,8 +79,6 @@ ServerService::ServerService(NetAddress targetAddress, SharedPtr<IocpCore> core,
 
 bool ServerService::Init()
 {
-	// Listener를 만들고, 로직 서버 같이 서버 동작에 필수적인 다른 서버들과 필요한 커넥션을 맺는다
-	// 이 때는 IOCP를 사용해 멀티스레드에서의 커넥션을 처리하는 대신 본 스레드에서 바로 커넥션을 처리한다
 	if (!IsValid())
 		return false;
 	_listener = MakeShared<Listener>();
