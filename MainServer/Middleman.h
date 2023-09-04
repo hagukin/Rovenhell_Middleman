@@ -20,6 +20,8 @@ private:
 	const int32 LOGIC_SERVER_PORT = 8888;
 	const int32 CLIENT_PORT = 7777;
 	const int32 MAX_CLIENT_COUNT = 32;
+	const int32 LOGIC_SERVER_THREAD_COUNT = 2;
+	const int32 CLIENT_THREAD_COUNT = 2; // 실행 환경에 맞게 조정 필요
 
 public:
 	SharedPtr<LogicServerService> _logicService;

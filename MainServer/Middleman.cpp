@@ -17,7 +17,7 @@ bool Middleman::Init()
 		MakeShared<SToLSession>,
 		1);
 	ASSERT_CRASH(_logicService->Init());
-	for (int32 i = 0; i < 2; i++)
+	for (int32 i = 0; i < CLIENT_THREAD_COUNT; i++)
 	{
 		GThreadManager->Launch([=]()
 			{
@@ -34,7 +34,7 @@ bool Middleman::Init()
 		MakeShared<SToCSession>,
 		MAX_CLIENT_COUNT);
 	ASSERT_CRASH(_serverService->Init());
-	for (int32 i = 0; i < 4; i++)
+	for (int32 i = 0; i < LOGIC_SERVER_THREAD_COUNT; i++)
 	{
 		GThreadManager->Launch([=]()
 			{

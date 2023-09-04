@@ -34,6 +34,7 @@ int main()
 
 	unsigned char sendData[6] = { 67, 76, 73, 69, 78, 84 };
 
+	uint32 testTick = 0;
 	while (true)
 	{
 		SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(1000);
@@ -42,7 +43,8 @@ int main()
 		((PacketHeader*)buffer)->size = (sizeof(sendData) + sizeof(PacketHeader));
 		((PacketHeader*)buffer)->senderType = 0;
 		((PacketHeader*)buffer)->id = 1;
-		::memcpy(&buffer[6], sendData, sizeof(sendData));
+		((PacketHeader*)buffer)->tick = ++testTick;
+		::memcpy(&buffer[sizeof(PacketHeader)], sendData, sizeof(sendData));
 		sendBuffer->Close((uint32)((PacketHeader*)buffer)->size);
 		GSessionManager.Broadcast(sendBuffer);
 
