@@ -42,7 +42,7 @@ int main()
 		uint8* buffer = sendBuffer->Buffer();
 		((PacketHeader*)buffer)->size = (sizeof(sendData) + sizeof(PacketHeader));
 		((PacketHeader*)buffer)->senderType = 0;
-		((PacketHeader*)buffer)->id = 1;
+		((PacketHeader*)buffer)->id = PacketId::CLIENT_EVENT_ON_RECV;
 		((PacketHeader*)buffer)->tick = ++testTick;
 		::memcpy(&buffer[sizeof(PacketHeader)], sendData, sizeof(sendData));
 		sendBuffer->Close((uint32)((PacketHeader*)buffer)->size);
