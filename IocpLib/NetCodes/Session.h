@@ -36,6 +36,8 @@ public:
 	SOCKET GetSocket() { return _socket; }
 	bool IsConnected() { return _connected; }
 	SharedPtr<Session> GetSessionRef() { return static_pointer_cast<Session>(shared_from_this()); }
+	const uint64 GetSessionId() { return _sessionId; }
+	bool SetSessionId(uint64 id) { _sessionId = id; return true; }
 
 private:
 	virtual HANDLE GetHandle() override;
@@ -78,6 +80,7 @@ private:
 	DisconnectEvent _disconnectEvent;
 	RecvEvent _recvEvent;
 	SendEvent _sendEvent;
+	uint64 _sessionId = 0; // 0: 초기화 안됨
 };
 
 class PacketSession : public Session

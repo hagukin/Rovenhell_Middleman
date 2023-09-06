@@ -1,7 +1,7 @@
 #pragma once
 #include "../pch/pch.h"
 
-enum HostTypeEnum : uint8
+enum HostTypeEnum : uint16
 {
 	NONE,
 	CLIENT_HEADLESS,

@@ -23,6 +23,7 @@ SharedPtr<Session> Service::CreateSession()
 {
 	SharedPtr<Session> session = _sessionFactory();
 	session->SetService(shared_from_this());
+	session->SetSessionId(++_lastSessionId); // id는 1 이상
 
 	if (_iocpCore->Register(session) == false)
 		return nullptr;

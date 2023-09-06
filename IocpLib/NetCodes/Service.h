@@ -43,6 +43,8 @@ protected:
 	int32 _sessionCount = 0;
 	int32 _maxSessionCount = 0;
 	SessionFactory _sessionFactory = nullptr;
+private:
+	uint64 _lastSessionId = 0; // 1씩 increment 해나가면서 세션에 아이디를 배정한다
 };
 
 

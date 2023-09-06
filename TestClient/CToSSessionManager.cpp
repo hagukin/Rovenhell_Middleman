@@ -21,6 +21,8 @@ void CToSSessionManager::Broadcast(SharedPtr<SendBuffer> sendBuffer)
 	WRITE_LOCK;
 	for (SharedPtr<CToSSession> session : _sessions)
 	{
+		uint8* buffer = sendBuffer->Buffer();
+		((PacketHeader*)buffer)->senderId = session->GetSessionId();
 		session->Send(sendBuffer);
 	}
 }
