@@ -18,6 +18,7 @@ enum PacketId : uint16
 	DEFAULT,
 	CHAT_GLOBAL,
 	ACTOR_PHYSICS,
+	GAME_STATE,
 	SESSION_INFO,
 };
 
