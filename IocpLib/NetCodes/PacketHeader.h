@@ -11,11 +11,13 @@ struct PacketHeader
 	uint8 protocol;
 	uint16 id;
 	uint32 tick;
+	float deltaTime;
 };
 
 enum PacketId : uint16
 {
 	DEFAULT,
+	GAME_INPUT,
 	CHAT_GLOBAL,
 	ACTOR_PHYSICS,
 	GAME_STATE,

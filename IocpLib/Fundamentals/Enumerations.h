@@ -11,6 +11,14 @@ enum HostTypeEnum : uint16
 	MIDDLEMAN_SERVER,
 };
 
+enum ActionTypeEnum : uint32
+{
+	UNDEFINED,
+	MOVE,
+	LOOK,
+	JUMP,
+};
+
 enum class ServiceType : uint8
 {
 	Middleman, // 다수의 클라이언트 세션들을 관리

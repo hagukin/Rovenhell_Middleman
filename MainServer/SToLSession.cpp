@@ -37,7 +37,7 @@ int32 SToLSession::OnRecvPacket(BYTE* buffer, int32 len)
 	uint8* sendData = sendBuffer->Buffer();
 	::memcpy(sendData, &buffer[0], header.size);
 
-	cout << "Logic -> Clients 브로드캐스팅" << endl;
+	// cout << "Logic -> Clients 브로드캐스팅" << endl;
 
 	sendBuffer->Close(header.size);
 	GSToCSessionManager.Broadcast(sendBuffer);

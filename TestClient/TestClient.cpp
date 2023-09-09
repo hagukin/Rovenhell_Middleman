@@ -46,6 +46,7 @@ int main()
 		((PacketHeader*)buffer)->protocol = PacketProtocol::CLIENT_EVENT_ON_RECV;
 		((PacketHeader*)buffer)->id = PacketId::CHAT_GLOBAL;
 		((PacketHeader*)buffer)->tick = ++testTick;
+		((PacketHeader*)buffer)->deltaTime = 0.016; // 60 frame
 		::memcpy(&buffer[sizeof(PacketHeader)], sendData, sizeof(sendData));
 		sendBuffer->Close((uint32)((PacketHeader*)buffer)->size);
 		GSessionManager.Broadcast(sendBuffer); // 생성된 모든 클라이언트가 동일한 패킷을 한 번씩 발송, senderId 여기서 초기화
