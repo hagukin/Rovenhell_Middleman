@@ -36,12 +36,7 @@ int32 SToCSession::OnRecvPacket(BYTE* buffer, int32 len)
 	uint8* sendData = sendBuffer->Buffer();
 	::memcpy(sendData, &buffer[0], header.size);
 
-	cout << "Client Session ID " << this->GetSessionId() << " -> Logic 중개 : ";
-	for (int i = sizeof(PacketHeader); i < header.size; ++i)
-	{
-		cout << (char)sendData[i];
-	}
-	cout << endl;
+	cout << "Client Session ID " << this->GetSessionId() << " -> Logic 중개" << endl;
 
 	sendBuffer->Close(header.size);
 	GSToLSessionManager.Send(sendBuffer);
