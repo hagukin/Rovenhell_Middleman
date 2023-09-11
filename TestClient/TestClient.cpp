@@ -43,7 +43,7 @@ int main()
 		((PacketHeader*)buffer)->size = (sizeof(sendData) + sizeof(PacketHeader));
 		((PacketHeader*)buffer)->senderType = 0;
 		// senderId는 뒤에서
-		((PacketHeader*)buffer)->protocol = PacketProtocol::CLIENT_EVENT_ON_RECV;
+		((PacketHeader*)buffer)->protocol = PacketProtocol::CLIENT_ONCE_PER_TICK;
 		((PacketHeader*)buffer)->id = PacketId::CHAT_GLOBAL;
 		((PacketHeader*)buffer)->tick = ++testTick;
 		((PacketHeader*)buffer)->deltaTime = 0.016; // 60 frame
