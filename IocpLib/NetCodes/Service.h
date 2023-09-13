@@ -11,7 +11,7 @@ using SessionFactory = function<SharedPtr<Session>(void)>;
 class Service : public enable_shared_from_this<Service>
 {
 public:
-	Service(ServiceType type, NetAddress address, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount = 1);
+	Service(ServiceType type, NetAddress address, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount);
 	virtual ~Service();
 
 	virtual bool Init() abstract;

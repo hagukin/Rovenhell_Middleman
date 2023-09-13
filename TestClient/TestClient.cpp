@@ -37,21 +37,19 @@ int main()
 	uint32 testTick = 0;
 	while (true)
 	{
-		SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(1000);
+		SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(512);
 
 		uint8* buffer = sendBuffer->Buffer();
 		((PacketHeader*)buffer)->size = (sizeof(sendData) + sizeof(PacketHeader));
 		((PacketHeader*)buffer)->senderType = 0;
 		// senderId는 뒤에서
-		((PacketHeader*)buffer)->protocol = PacketProtocol::CLIENT_ONCE_PER_TICK;
+		((PacketHeader*)buffer)->protocol = PacketProtocol::CLIENT_ALLOW_MULTIPLE_PER_TICK;
 		((PacketHeader*)buffer)->id = PacketId::CHAT_GLOBAL;
-		((PacketHeader*)buffer)->tick = ++testTick;
-		((PacketHeader*)buffer)->deltaTime = 0.016; // 60 frame
 		::memcpy(&buffer[sizeof(PacketHeader)], sendData, sizeof(sendData));
 		sendBuffer->Close((uint32)((PacketHeader*)buffer)->size);
 		GSessionManager.Broadcast(sendBuffer); // 생성된 모든 클라이언트가 동일한 패킷을 한 번씩 발송, senderId 여기서 초기화
 
-		this_thread::sleep_for(16ms); // 60 frame
+		this_thread::sleep_for(100ms);
 	}
 
 	GThreadManager->Join();

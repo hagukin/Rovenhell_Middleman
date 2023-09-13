@@ -10,8 +10,6 @@ struct PacketHeader
 	uint64 senderId;
 	uint8 protocol;
 	uint16 id;
-	uint32 tick;
-	float deltaTime;
 };
 
 enum PacketId : uint16
