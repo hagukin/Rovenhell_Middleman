@@ -20,10 +20,37 @@ void SToCSession::OnConnected()
 	::memcpy(sendBuffer->Buffer(), &header, header.size);
 	sendBuffer->Close(header.size);
 	GSToCSessionManager.Send(this->GetSessionId(), sendBuffer);
+
+	// 로직서버에게 새 클라이언트 접속을 알림
+	PacketHeader connectedHeader = {
+		(uint16)sizeof(PacketHeader),
+		HostTypeEnum::MIDDLEMAN_SERVER,
+		this->GetSessionId(),
+		PacketProtocol::MIDDLEMAN_EVENT,
+		PacketId::SESSION_CONNECTED,
+	};
+	SharedPtr<SendBuffer> connectedBuffer = GSendBufferManager->Open(connectedHeader.size);
+	::memcpy(connectedBuffer->Buffer(), &connectedHeader, connectedHeader.size);
+	connectedBuffer->Close(connectedHeader.size);
+	GSToLSessionManager.Send(connectedBuffer);
 }
 
 void SToCSession::OnDisconnected()
 {
+	// 로직서버에게 클라이언트 연결 해제를 알림
+	PacketHeader disconnectedHeader = {
+		(uint16)sizeof(PacketHeader),
+		HostTypeEnum::MIDDLEMAN_SERVER,
+		this->GetSessionId(),
+		PacketProtocol::MIDDLEMAN_EVENT,
+		PacketId::SESSION_DISCONNECTED,
+	};
+	SharedPtr<SendBuffer> disconnectedBuffer = GSendBufferManager->Open(disconnectedHeader.size);
+	::memcpy(disconnectedBuffer->Buffer(), &disconnectedHeader, disconnectedHeader.size);
+	disconnectedBuffer->Close(disconnectedHeader.size);
+	GSToLSessionManager.Send(disconnectedBuffer);
+
+	// 세션 삭제
 	GSToCSessionManager.Remove(static_pointer_cast<SToCSession>(shared_from_this()));
 }
 

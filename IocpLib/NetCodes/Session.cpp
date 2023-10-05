@@ -272,10 +272,10 @@ void Session::HandleError(int32 errorCode)
 	{
 	case WSAECONNRESET:
 	case WSAECONNABORTED:
-		Disconnect(L"HandleError");
+		Disconnect(L"HandleError WSACONNRESET / WSACONNABORTED");
 		break;
 	default:
-		cout << "HandleError() - 에러코드: " << errorCode << endl;
+		cout << "HandleError() ErrorCode:" << errorCode << endl;
 		break;
 	}
 }

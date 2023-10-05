@@ -15,7 +15,6 @@ enum ActionTypeEnum : uint32
 {
 	UNDEFINED,
 	MOVE,
-	LOOK,
 	JUMP,
 };
 
