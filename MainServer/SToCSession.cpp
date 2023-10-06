@@ -37,7 +37,8 @@ void SToCSession::OnConnected()
 
 void SToCSession::OnDisconnected()
 {
-	// 로직서버에게 클라이언트 연결 해제를 알림
+	// 로직서버 및 전체 클라이언트들에게 클라이언트 연결 해제를 알림
+	// 왜 클라이언트들에게도 같이 알리는지에 대한 설명은 언리얼 프로젝트 내 주석을 참고
 	PacketHeader disconnectedHeader = {
 		(uint16)sizeof(PacketHeader),
 		HostTypeEnum::MIDDLEMAN_SERVER,
@@ -49,6 +50,7 @@ void SToCSession::OnDisconnected()
 	::memcpy(disconnectedBuffer->Buffer(), &disconnectedHeader, disconnectedHeader.size);
 	disconnectedBuffer->Close(disconnectedHeader.size);
 	GSToLSessionManager.Send(disconnectedBuffer);
+	GSToCSessionManager.Broadcast(disconnectedBuffer);
 
 	// 세션 삭제
 	GSToCSessionManager.Remove(static_pointer_cast<SToCSession>(shared_from_this()));

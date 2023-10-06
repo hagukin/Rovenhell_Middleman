@@ -11,7 +11,7 @@ enum HostTypeEnum : uint16
 	MIDDLEMAN_SERVER,
 };
 
-enum ActionTypeEnum : uint32
+enum ActionTypeEnum : uint8
 {
 	UNDEFINED,
 	MOVE,
