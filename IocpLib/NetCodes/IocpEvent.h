@@ -1,3 +1,6 @@
+// Copyright 2023 Haguk Kim
+// Author: Haguk Kim
+
 #pragma once
 #include "IocpCore.h"
 
@@ -12,7 +15,6 @@ enum class EventType : uint8
 	Send
 };
 
-
 class IocpEvent : public OVERLAPPED
 {
 public:
@@ -25,20 +27,17 @@ public:
 	SharedPtr<IocpObject> owner;
 };
 
-
 class ConnectEvent : public IocpEvent
 {
 public:
 	ConnectEvent() : IocpEvent(EventType::Connect) { }
 };
 
-
 class DisconnectEvent : public IocpEvent
 {
 public:
 	DisconnectEvent() : IocpEvent(EventType::Disconnect) { }
 };
-
 
 class AcceptEvent : public IocpEvent
 {
@@ -49,13 +48,11 @@ public:
 	SharedPtr<Session>	session = nullptr;
 };
 
-
 class RecvEvent : public IocpEvent
 {
 public:
 	RecvEvent() : IocpEvent(EventType::Recv) { }
 };
-
 
 class SendEvent : public IocpEvent
 {

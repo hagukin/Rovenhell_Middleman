@@ -1,5 +1,7 @@
-#pragma once
+// Copyright 2023 Haguk Kim
+// Author: Haguk Kim
 
+#pragma once
 
 class RecvBuffer
 {

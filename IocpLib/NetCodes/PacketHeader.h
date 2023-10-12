@@ -1,3 +1,6 @@
+// Copyright 2023 Haguk Kim
+// Author: Haguk Kim
+
 #pragma once
 #include "../pch/pch.h"
 
@@ -5,14 +8,17 @@
 
 struct PacketHeader
 {
+	uint8 uniqueId;
+	uint8 packetOrder;
+	uint8 fragmentCount;
 	uint16 size;
 	uint16 senderType;
 	uint64 senderId;
 	uint8 protocol;
-	uint16 id;
+	uint16 type;
 };
 
-enum PacketId : uint16
+enum PacketType : uint16
 {
 	DEFAULT,
 	GAME_INPUT,

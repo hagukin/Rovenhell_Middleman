@@ -1,3 +1,6 @@
+// Copyright 2023 Haguk Kim
+// Author: Haguk Kim
+
 #include "pch.h"
 #include "SToCSession.h"
 #include "SToCSessionManager.h"
@@ -10,11 +13,14 @@ void SToCSession::OnConnected()
 
 	// 최초 패킷은 미들맨에서 생성한 해당 호스트의 세션 정보 전송
 	PacketHeader header = {
+		0,
+		0,
+		1,
 		(uint16)sizeof(PacketHeader),
 		HostTypeEnum::MIDDLEMAN_SERVER,
 		this->GetSessionId(),
 		PacketProtocol::MIDDLEMAN_EVENT,
-		PacketId::SESSION_INFO,
+		PacketType::SESSION_INFO,
 	};
 	SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(header.size);
 	::memcpy(sendBuffer->Buffer(), &header, header.size);
@@ -23,11 +29,14 @@ void SToCSession::OnConnected()
 
 	// 로직서버에게 새 클라이언트 접속을 알림
 	PacketHeader connectedHeader = {
+		0,
+		0,
+		1,
 		(uint16)sizeof(PacketHeader),
 		HostTypeEnum::MIDDLEMAN_SERVER,
 		this->GetSessionId(),
 		PacketProtocol::MIDDLEMAN_EVENT,
-		PacketId::SESSION_CONNECTED,
+		PacketType::SESSION_CONNECTED,
 	};
 	SharedPtr<SendBuffer> connectedBuffer = GSendBufferManager->Open(connectedHeader.size);
 	::memcpy(connectedBuffer->Buffer(), &connectedHeader, connectedHeader.size);
@@ -40,11 +49,14 @@ void SToCSession::OnDisconnected()
 	// 로직서버 및 전체 클라이언트들에게 클라이언트 연결 해제를 알림
 	// 왜 클라이언트들에게도 같이 알리는지에 대한 설명은 언리얼 프로젝트 내 주석을 참고
 	PacketHeader disconnectedHeader = {
+		0,
+		0,
+		1,
 		(uint16)sizeof(PacketHeader),
 		HostTypeEnum::MIDDLEMAN_SERVER,
 		this->GetSessionId(),
 		PacketProtocol::MIDDLEMAN_EVENT,
-		PacketId::SESSION_DISCONNECTED,
+		PacketType::SESSION_DISCONNECTED,
 	};
 	SharedPtr<SendBuffer> disconnectedBuffer = GSendBufferManager->Open(disconnectedHeader.size);
 	::memcpy(disconnectedBuffer->Buffer(), &disconnectedHeader, disconnectedHeader.size);

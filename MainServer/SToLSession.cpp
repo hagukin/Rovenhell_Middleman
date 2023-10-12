@@ -1,3 +1,6 @@
+// Copyright 2023 Haguk Kim
+// Author: Haguk Kim
+
 #include "pch.h"
 #include "SToLSession.h"
 #include "SToLSessionManager.h"
@@ -11,11 +14,14 @@ void SToLSession::OnConnected()
 
 	// 최초 패킷은 미들맨에서 생성한 해당 호스트의 세션 정보 전송
 	PacketHeader header = { 
+		0,
+		0,
+		1,
 		(uint16) sizeof(PacketHeader), 
 		HostTypeEnum::MIDDLEMAN_SERVER,
 		this->GetSessionId(),
 		PacketProtocol::MIDDLEMAN_EVENT,
-		PacketId::SESSION_INFO,
+		PacketType::SESSION_INFO,
 	};
 	SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(header.size);
 	::memcpy(sendBuffer->Buffer(), &header, header.size);

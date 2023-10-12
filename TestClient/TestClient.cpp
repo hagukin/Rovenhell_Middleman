@@ -1,4 +1,7 @@
-﻿#include "pch.h"
+﻿// Copyright 2023 Haguk Kim
+// Author: Haguk Kim
+
+#include "pch.h"
 #include "Fundamentals/ThreadManager.h"
 #include "NetCodes/Service.h"
 #include "NetCodes/Session.h"
@@ -38,17 +41,21 @@ int main()
 
 	SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(512);
 	uint8* buffer = sendBuffer->Buffer();
+	((PacketHeader*)buffer)->uniqueId = 0;
+	((PacketHeader*)buffer)->packetOrder = 0;
+	((PacketHeader*)buffer)->fragmentCount = 1;
 	((PacketHeader*)buffer)->size = (sizeof(sendData) + sizeof(PacketHeader));
 	((PacketHeader*)buffer)->senderType = 0;
 	// senderId는 뒤에서
 	((PacketHeader*)buffer)->protocol = PacketProtocol::CLIENT_ALLOW_MULTIPLE_PER_TICK;
-	((PacketHeader*)buffer)->id = PacketId::CHAT_GLOBAL;
+	((PacketHeader*)buffer)->type = PacketType::CHAT_GLOBAL;
 	::memcpy(&buffer[sizeof(PacketHeader)], sendData, sizeof(sendData));
 	sendBuffer->Close((uint32)((PacketHeader*)buffer)->size);
 
 	while (true)
 	{
 		GSessionManager.Broadcast(sendBuffer); // 생성된 모든 클라이언트가 동일한 패킷을 한 번씩 발송, senderId 여기서 초기화
+		this_thread::sleep_for(16.6ms);
 	}
 
 	GThreadManager->Join();
