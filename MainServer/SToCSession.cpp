@@ -14,7 +14,7 @@ void SToCSession::OnConnected()
 	// 최초 패킷은 미들맨에서 생성한 해당 호스트의 세션 정보 전송
 	PacketHeader header = {
 		0,
-		0,
+		1,
 		1,
 		(uint16)sizeof(PacketHeader),
 		HostTypeEnum::MIDDLEMAN_SERVER,
@@ -30,7 +30,7 @@ void SToCSession::OnConnected()
 	// 로직서버에게 새 클라이언트 접속을 알림
 	PacketHeader connectedHeader = {
 		0,
-		0,
+		1,
 		1,
 		(uint16)sizeof(PacketHeader),
 		HostTypeEnum::MIDDLEMAN_SERVER,
@@ -50,7 +50,7 @@ void SToCSession::OnDisconnected()
 	// 왜 클라이언트들에게도 같이 알리는지에 대한 설명은 언리얼 프로젝트 내 주석을 참고
 	PacketHeader disconnectedHeader = {
 		0,
-		0,
+		1,
 		1,
 		(uint16)sizeof(PacketHeader),
 		HostTypeEnum::MIDDLEMAN_SERVER,

@@ -42,7 +42,7 @@ int main()
 	SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(512);
 	uint8* buffer = sendBuffer->Buffer();
 	((PacketHeader*)buffer)->uniqueId = 0;
-	((PacketHeader*)buffer)->packetOrder = 0;
+	((PacketHeader*)buffer)->packetOrder = 1;
 	((PacketHeader*)buffer)->fragmentCount = 1;
 	((PacketHeader*)buffer)->size = (sizeof(sendData) + sizeof(PacketHeader));
 	((PacketHeader*)buffer)->senderType = 0;
