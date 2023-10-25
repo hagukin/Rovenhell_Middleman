@@ -21,15 +21,16 @@ void SToCSessionManager::Remove(SharedPtr<SToCSession> session)
 
 void SToCSessionManager::Broadcast(SharedPtr<SendBuffer> sendBuffer)
 {
-	WRITE_LOCK;
+	READ_LOCK;
 	for (const auto& session : _sessions)
 	{
 		session.second->Send(sendBuffer);
 	}
 }
 
-void SToCSessionManager::Send(uint64 sessionId, SharedPtr<SendBuffer> sendBuffer)
+void SToCSessionManager::Send(uint16 sessionId, SharedPtr<SendBuffer> sendBuffer)
 {
+	WRITE_LOCK;
 	const auto& session = _sessions.find(sessionId);
 	if (session == _sessions.end())
 	{

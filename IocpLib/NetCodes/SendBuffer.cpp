@@ -85,7 +85,7 @@ SharedPtr<SendBufferChunk> SendBufferManager::Pop()
 		}
 	}
 
-	return SharedPtr<SendBufferChunk>(xnew<SendBufferChunk>(), PushGlobal);
+	return SharedPtr<SendBufferChunk>(xnew<SendBufferChunk>(), PushGlobal); // 소멸 시 Push
 }
 
 void SendBufferManager::Push(SharedPtr<SendBufferChunk> buffer)

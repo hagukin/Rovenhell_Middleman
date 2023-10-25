@@ -11,7 +11,7 @@
 Service::Service(ServiceType type, NetAddress address, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount)
 	: _type(type), _netAddress(address), _iocpCore(core), _sessionFactory(factory), _maxSessionCount(maxSessionCount)
 {
-
+	ASSERT_CRASH(maxSessionCount <= SYSTEM_MAXIMUM_SESSION_COUNT);
 }
 
 Service::~Service()
@@ -26,7 +26,7 @@ SharedPtr<Session> Service::CreateSession()
 {
 	SharedPtr<Session> session = _sessionFactory();
 	session->SetService(shared_from_this());
-	session->SetSessionId(++_lastSessionId); // id는 1 이상
+	session->SetSessionId(GetFreeSessionId()); // id는 1 이상
 
 	if (_iocpCore->Register(session) == false)
 		return nullptr;
@@ -46,8 +46,24 @@ void Service::ReleaseSession(SharedPtr<Session> session)
 	WRITE_LOCK;
 	ASSERT_CRASH(_sessions.erase(session) != 0);
 	_sessionCount--;
+	_sessionIdPool[session->GetSessionId()] = false;
 }
 
+uint16 Service::GetFreeSessionId()
+{
+	WRITE_LOCK;
+	for (uint16 i = 1; i < SYSTEM_MAXIMUM_SESSION_COUNT; ++i)
+	{
+		uint16 nextIdx = (uint16) ((_lastUsedSessionId + i) % SYSTEM_MAXIMUM_SESSION_COUNT);
+		if (!_sessionIdPool[nextIdx])
+		{
+			_sessionIdPool[nextIdx] = true;
+			_lastUsedSessionId = nextIdx;
+			return nextIdx;
+		}
+	}
+	return 0; // free id not found
+}
 
 /* ClientService*/
 ClientService::ClientService(NetAddress targetAddress, SharedPtr<IocpCore> core, SessionFactory factory, int32 maxSessionCount)
@@ -68,7 +84,10 @@ bool ClientService::Start()
 	{
 		SharedPtr<Session> session = CreateSession();
 		if (session->Connect() == false)
+		{
+			cout << "클라이언트 세션이 Connect에 실패했습니다." << '\n';
 			return false;
+		}
 	}
 
 	return true;

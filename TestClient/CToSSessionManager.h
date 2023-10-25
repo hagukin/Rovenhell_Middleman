@@ -11,6 +11,7 @@ public:
 	void Add(SharedPtr<CToSSession> session);
 	void Remove(SharedPtr<CToSSession> session);
 	void Broadcast(SharedPtr<SendBuffer> sendBuffer);
+	void PrintAvgRecvCycleTime();
 
 private:
 	USE_LOCK;

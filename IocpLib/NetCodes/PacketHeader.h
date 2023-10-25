@@ -13,9 +13,10 @@ struct PacketHeader
 	uint8 fragmentCount;
 	uint16 size;
 	uint16 senderType;
-	uint64 senderId;
+	uint16 senderId;
 	uint8 protocol;
 	uint16 type;
+	uint32 senderTick;
 };
 
 enum PacketType : uint16

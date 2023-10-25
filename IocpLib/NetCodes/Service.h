@@ -9,6 +9,9 @@
 #include "../Fundamentals/Enumerations.h"
 #include <functional>
 
+// Service의 maxSessionCount가 가질 수 있는 값의 최대치; 초과 시 Crash
+#define SYSTEM_MAXIMUM_SESSION_COUNT UINT16_MAX
+
 using SessionFactory = function<SharedPtr<Session>(void)>;
 
 class Service : public enable_shared_from_this<Service>
@@ -35,6 +38,7 @@ public:
 	ServiceType GetServiceType() { return _type; }
 	NetAddress GetNetAddress() { return _netAddress; }
 	SharedPtr<IocpCore>& GetIocpCore() { return _iocpCore; }
+	uint16 GetFreeSessionId();
 
 protected:
 	USE_LOCK;
@@ -47,7 +51,8 @@ protected:
 	int32 _maxSessionCount = 0;
 	SessionFactory _sessionFactory = nullptr;
 private:
-	uint64 _lastSessionId = 0; // 1씩 increment 해나가면서 세션에 아이디를 배정한다
+	int _lastUsedSessionId = 0; // sessionId 생성 시 되도록 중복을 피하기 위해 점점 커지는 방향으로 하나씩 뽑아씀 (circular queue)
+	bool _sessionIdPool[SYSTEM_MAXIMUM_SESSION_COUNT] = { false, }; // sessionId 할당할 때 사용; true는 누군가 이미 할당받은 상태인 id임을 의미함
 };
 
 

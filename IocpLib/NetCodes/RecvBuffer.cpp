@@ -6,7 +6,7 @@
 
 RecvBuffer::RecvBuffer(int32 bufferSize) : _bufferSize(bufferSize)
 {
-	_capacity = bufferSize * BUFFER_COUNT;
+	_capacity = bufferSize * BUFFER_CAPACITY_MULTIPLIER; // 실제 버퍼 할당 크기를 더 크게 잡아 최적화
 	_buffer.resize(_capacity);
 }
 

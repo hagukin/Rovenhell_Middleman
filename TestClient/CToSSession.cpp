@@ -31,6 +31,9 @@ int32 CToSSession::OnRecvPacket(BYTE* buffer, int32 len)
 	//	cout << (char)recvBuffer[i];
 	//}
 	//cout << endl;
+	auto prevRecvTime = _lastRecvTime;
+	_lastRecvTime = std::chrono::system_clock::now();
+	_recvCycleTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::duration_cast<std::chrono::milliseconds>(_lastRecvTime - prevRecvTime)).count();
 	return len;
 }
 

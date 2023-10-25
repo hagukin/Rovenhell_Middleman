@@ -29,3 +29,19 @@ void CToSSessionManager::Broadcast(SharedPtr<SendBuffer> sendBuffer)
 		session->Send(sendBuffer);
 	}
 }
+
+void CToSSessionManager::PrintAvgRecvCycleTime()
+{
+	READ_LOCK;
+	if (_sessions.size() == 0) return;
+
+	long long cycleTimeSum = 0;
+	for (SharedPtr<CToSSession> session : _sessions)
+	{
+		cycleTimeSum += session->GetRecvCycleTime();
+	}
+	double cycleAvg = round(cycleTimeSum / _sessions.size());
+
+	cout << "클라 평균 Recv 주기: " << (int) cycleAvg << "ms" << '\n';
+	// 주의: 이 값은 fragment 하나를 받는 시간이기 때문에 실질적인 단일 패킷 수신시간을 구하려면 이 값에 fragment 개수를 곱해야 한다
+}

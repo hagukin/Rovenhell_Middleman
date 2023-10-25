@@ -12,4 +12,9 @@ public:
 	virtual int32 OnRecvPacket(BYTE* buffer, int32 len) override;
 	virtual void OnSend(int32 len) override;
 	virtual void OnDisconnected() override;
+	long long GetRecvCycleTime() { return _recvCycleTime; }
+
+private:
+	std::chrono::system_clock::time_point _lastRecvTime;
+	long long _recvCycleTime;
 };

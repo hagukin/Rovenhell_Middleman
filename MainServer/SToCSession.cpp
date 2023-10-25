@@ -21,6 +21,7 @@ void SToCSession::OnConnected()
 		this->GetSessionId(),
 		PacketProtocol::MIDDLEMAN_EVENT,
 		PacketType::SESSION_INFO,
+		0
 	};
 	SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(header.size);
 	::memcpy(sendBuffer->Buffer(), &header, header.size);
@@ -37,6 +38,7 @@ void SToCSession::OnConnected()
 		this->GetSessionId(),
 		PacketProtocol::MIDDLEMAN_EVENT,
 		PacketType::SESSION_CONNECTED,
+		0
 	};
 	SharedPtr<SendBuffer> connectedBuffer = GSendBufferManager->Open(connectedHeader.size);
 	::memcpy(connectedBuffer->Buffer(), &connectedHeader, connectedHeader.size);
@@ -46,8 +48,7 @@ void SToCSession::OnConnected()
 
 void SToCSession::OnDisconnected()
 {
-	// 로직서버 및 전체 클라이언트들에게 클라이언트 연결 해제를 알림
-	// 왜 클라이언트들에게도 같이 알리는지에 대한 설명은 언리얼 프로젝트 내 주석을 참고
+	// 로직서버에게 클라이언트 연결 해제를 알림
 	PacketHeader disconnectedHeader = {
 		0,
 		1,
@@ -57,12 +58,12 @@ void SToCSession::OnDisconnected()
 		this->GetSessionId(),
 		PacketProtocol::MIDDLEMAN_EVENT,
 		PacketType::SESSION_DISCONNECTED,
+		0
 	};
 	SharedPtr<SendBuffer> disconnectedBuffer = GSendBufferManager->Open(disconnectedHeader.size);
 	::memcpy(disconnectedBuffer->Buffer(), &disconnectedHeader, disconnectedHeader.size);
 	disconnectedBuffer->Close(disconnectedHeader.size);
 	GSToLSessionManager.Send(disconnectedBuffer);
-	GSToCSessionManager.Broadcast(disconnectedBuffer);
 
 	// 세션 삭제
 	GSToCSessionManager.Remove(static_pointer_cast<SToCSession>(shared_from_this()));
