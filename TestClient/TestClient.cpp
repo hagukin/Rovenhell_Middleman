@@ -9,7 +9,7 @@
 #include "CToSSession.h"
 #include "CToSSessionManager.h"
 
-#define TEST_CLIENT_COUNT 500
+#define TEST_CLIENT_COUNT 100
 #define DESIRED_CLIENT_PACKET_SEND_CYCLE 100.0ms // 클라 패킷 발송 주기
 
 int main()
