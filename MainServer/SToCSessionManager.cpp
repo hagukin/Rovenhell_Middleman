@@ -23,7 +23,7 @@ void SToCSessionManager::Broadcast(SharedPtr<SendBuffer> sendBuffer)
 {
 	READ_LOCK;
 	for (const auto& session : _sessions)
-	{
+	{	
 		session.second->Send(sendBuffer);
 	}
 }

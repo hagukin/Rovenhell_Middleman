@@ -21,7 +21,7 @@ void SToCSession::OnConnected()
 		this->GetSessionId(),
 		PacketProtocol::MIDDLEMAN_EVENT,
 		PacketType::SESSION_INFO,
-		0
+		0.0f
 	};
 	SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(header.size);
 	::memcpy(sendBuffer->Buffer(), &header, header.size);
@@ -38,7 +38,7 @@ void SToCSession::OnConnected()
 		this->GetSessionId(),
 		PacketProtocol::MIDDLEMAN_EVENT,
 		PacketType::SESSION_CONNECTED,
-		0
+		0.0f
 	};
 	SharedPtr<SendBuffer> connectedBuffer = GSendBufferManager->Open(connectedHeader.size);
 	::memcpy(connectedBuffer->Buffer(), &connectedHeader, connectedHeader.size);
@@ -58,7 +58,7 @@ void SToCSession::OnDisconnected()
 		this->GetSessionId(),
 		PacketProtocol::MIDDLEMAN_EVENT,
 		PacketType::SESSION_DISCONNECTED,
-		0
+		0.0f
 	};
 	SharedPtr<SendBuffer> disconnectedBuffer = GSendBufferManager->Open(disconnectedHeader.size);
 	::memcpy(disconnectedBuffer->Buffer(), &disconnectedHeader, disconnectedHeader.size);

@@ -22,7 +22,7 @@ void SToLSession::OnConnected()
 		this->GetSessionId(),
 		PacketProtocol::MIDDLEMAN_EVENT,
 		PacketType::SESSION_INFO,
-		0
+		0.0f
 	};
 	SharedPtr<SendBuffer> sendBuffer = GSendBufferManager->Open(header.size);
 	::memcpy(sendBuffer->Buffer(), &header, header.size);

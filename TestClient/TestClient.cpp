@@ -9,7 +9,7 @@
 #include "CToSSession.h"
 #include "CToSSessionManager.h"
 
-#define TEST_CLIENT_COUNT 100
+#define TEST_CLIENT_COUNT 50
 #define DESIRED_CLIENT_PACKET_SEND_CYCLE 100.0ms // 클라 패킷 발송 주기
 
 int main()
@@ -56,7 +56,7 @@ int main()
 	// senderId는 뒤에서
 	((PacketHeader*)buffer)->protocol = PacketProtocol::CLIENT_ALLOW_MULTIPLE_PER_TICK;
 	((PacketHeader*)buffer)->type = PacketType::CHAT_GLOBAL;
-	((PacketHeader*)buffer)->senderTick = 0;
+	((PacketHeader*)buffer)->hostTime = 0.0f;
 	::memcpy(&buffer[sizeof(PacketHeader)], sendData, sizeof(sendData));
 	sendBuffer->Close((uint32)((PacketHeader*)buffer)->size);
 

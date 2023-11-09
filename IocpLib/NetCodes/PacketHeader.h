@@ -16,7 +16,7 @@ struct PacketHeader
 	uint16 senderId;
 	uint8 protocol;
 	uint16 type;
-	uint32 senderTick;
+	float hostTime;
 };
 
 enum PacketType : uint16
