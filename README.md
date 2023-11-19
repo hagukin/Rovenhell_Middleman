@@ -3,9 +3,10 @@ Rovenhell is a server-authoritative MMO game server architecture, powered by Unr
 Instead of using Unreal's Reflection system, Rovenhell uses custom-written netcodes to synchronize around 200 players per dedicated server.  
 For more information, visit [here](https://gamesmith.tistory.com/261).  
 ## Showcase
-![playerTest](https://github.com/hagukin/Rovenhell_UE/assets/63915665/8b8c53d9-1b15-4b03-bc1f-5536a4e3ab52)
+![playerTest](https://github.com/hagukin/Rovenhell_UE/assets/63915665/f5c3cbeb-9969-4be6-9c48-fd02c0a80829)
 ## Architecture Overview
-![BriefArchitectureOverview](https://github.com/hagukin/Rovenhell_UE/assets/63915665/6ad9d9db-0e74-40ae-9d36-12990d606897)
+![BriefArchitectureOverview](https://github.com/hagukin/Rovenhell_UE/assets/63915665/f63258fb-0c64-4594-951b-eaaa3514469a)
 ## Scale-out Strategy
-![potentialScaleOutStrategy](https://github.com/hagukin/Rovenhell_UE/assets/63915665/f7bc8ec8-1cc6-4c2e-a13d-ba10159232b7)
-![scaleout2](https://github.com/hagukin/Rovenhell_UE/assets/63915665/cc9679fb-6d7f-4ae3-8e74-d12bbbc67c86)
+![potentialScaleOutStrategy](https://github.com/hagukin/Rovenhell_UE/assets/63915665/491e065a-429c-40d6-b1aa-a9cf3c2eac59)
+![scaleout2](https://github.com/hagukin/Rovenhell_UE/assets/63915665/4e7d5369-ab78-4e96-b71e-66647a8767ba)
+
