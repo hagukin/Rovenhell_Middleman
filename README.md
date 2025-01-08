@@ -1,9 +1,10 @@
 # Rovenhell
-Rovenhell is a server-authoritative MMO game server architecture, powered by Unreal Engine 5.  
-Instead of using Unreal's Replication system, Rovenhell uses custom-written netcodes to synchronize around 200 players per dedicated server.  
-  
-The project is **NOT** intended to serve as a networking foundation; it is a prototype designed to test a distributed, dedicated-server-based MMO architecture. It has been discontinued due to architectural limitations discovered during implementation.  
-  
+Rovenhell is a project aimed at creating a server-authoritative MMO game server architecture using distributed dedicated servers.  
+However, it was discontinued due to architectural limitations discovered during implementation. 
+
+The project is NOT intended to be a production-ready tool; its primary goal was to help me learn network programming and test ideas, exploring why certain concepts are rarely used in real-world MMOs. 
+
+Instead of relying on Unreal's replication system, Rovenhell uses custom-written netcode to synchronize approximately 200 players per dedicated server. However, the player base does not scale linearly with distribution, which was the core reason for discontinuing the project.  
 For more information, visit [here](https://gamesmith.tistory.com/261).  
   
 ## Showcase
